@@ -8,6 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  smart_pag_contract: ^0.0.8
   flutter:
     sdk: flutter
 
