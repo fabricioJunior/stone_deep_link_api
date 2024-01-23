@@ -60,13 +60,13 @@ class _MyHomePageState extends State<MyHomePage> {
       Uri url = Uri(
         scheme: 'payment-app',
         host: 'pay',
-        queryParameters: {
-          "amount": amount,
-          "editable_amount": editableAmount,
-          "installment_count": installmentCount,
-          "transaction_type": transactionType,
-          "return_scheme": returnScheme
-        },
+        queryParameters: <String, String>{}..addAll({
+            "amount": amount.toString(),
+            "editable_amount": editableAmount.toString(),
+            "installment_count": installmentCount.toString(),
+            "transaction_type": transactionType,
+            "return_scheme": returnScheme
+          }),
       );
       await launchUrl(url);
     } on PlatformException catch (e) {
