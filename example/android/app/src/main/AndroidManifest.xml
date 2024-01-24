@@ -34,6 +34,15 @@
                     <data
                     android:scheme="exstone"
                     android:host="stone.com" />
+            </intent-filter> 
+            
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="pay-response"
+                    android:scheme="@string/return_scheme" />
             </intent-filter>
             
         </activity>
