@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:stone_deep_link/stone_deep_link.dart';
 
 void main() {

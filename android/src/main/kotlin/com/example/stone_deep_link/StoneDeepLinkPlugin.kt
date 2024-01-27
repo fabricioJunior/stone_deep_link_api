@@ -35,13 +35,17 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler, PluginRegistry.NewI
   override fun onMethodCall(call: MethodCall, result: Result) {
 
     if (call.method == "fazerPagamento") {
+      var amount = call.argument<String?>("amount")
+      var editableAmount = call.argument<String?>("editableAmount")
+      var transactionType = call.argument<String?>("transactionType")
+      var installmentCount =   call.argument<String?>("installmentCount")
       sendDeeplink(
-        call.argument<Int?>("amount"),
-        call.argument<Boolean?>("editableAmount"),
-        call.argument<String?>("transactionType"),
-        call.argument<Int?>("installmentCount"),
+        amount?.toInt(),
+        editableAmount?.toBoolean(),
+        transactionType,
+        installmentCount?.toInt(),
         call.argument<String?>("installmentType"),
-        call.argument<Int?>("orderId"),
+        call.argument<String?>("orderId")?.toInt(),
         call.argument<String?>("returnScheme")
       )
       result.success(true)
