@@ -22,8 +22,13 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
+task wrapper(type: Wrapper){
+    gradleVersion = '7.2'
+}
+
+
 android {
-    namespace "com.example.example"
+    namespace "com.example.stone_deep_link_api_example"
     compileSdkVersion flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -42,7 +47,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.example"
+        applicationId "com.example.stone_deep_link_api_example"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion

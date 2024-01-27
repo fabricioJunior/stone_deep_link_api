@@ -1,6 +1,6 @@
-# example
+# stone_deep_link_api_example
 
-A new Flutter project.
+Demonstrates how to use the stone_deep_link_api plugin.
 
 ## Getting Started
 
