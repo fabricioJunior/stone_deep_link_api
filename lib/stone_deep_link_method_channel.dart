@@ -34,13 +34,13 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
     int parcelas,
     int valor,
   ) async {
-    Map<String, dynamic> args = {
-      "amount": valor,
-      "editableAmount": false,
+    Map<String, String> args = {
+      "amount": valor.toString(),
+      "editableAmount": false.toString(),
       "transactionType": formaDePagamento,
     };
     if (parcelas >= 2) {
-      args.addAll({"installmentCount": parcelas});
+      args.addAll({"installmentCount": parcelas.toString()});
     }
 
     methodChannel.invokeListMethod('fazerPagamento', args);
