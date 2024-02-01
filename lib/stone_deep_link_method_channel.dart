@@ -43,7 +43,7 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
       args.addAll({"installmentCount": parcelas.toString()});
     }
 
-    methodChannel.invokeListMethod('fazerPagamento', args);
+    await methodChannel.invokeMethod<bool>('fazerPagamento', args);
   }
 
   Future _onMensagemRecebida(MethodCall call) async {
