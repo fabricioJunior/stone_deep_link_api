@@ -49,8 +49,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler, PluginRegistry.NewI
         call.argument<String?>("returnScheme")
       )
       result.success(true)
-    }
-    if (call.method == "getPlatformVersion") {
+    }else if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     } else {
       result.notImplemented()
