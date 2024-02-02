@@ -17,6 +17,7 @@ dependencies:
   flutter:
     sdk: flutter
   smart_pag_contract: ^0.0.8
+  app_links: ^3.5.0
   stone_deep_link:
     # When depending on this package from a real application you should use:
     #   stone_deep_link: ^x.y.z

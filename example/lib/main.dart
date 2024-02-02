@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:app_links/app_links.dart';
 
 import 'package:stone_deep_link/stone_deep_link.dart';
 
@@ -34,6 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String deeplinkResult = "";
+  final _appLinks = AppLinks();
 
   Future<void> _sendDeeplink() async {
     StoneDeepLink().fazerPagamento(
@@ -41,6 +43,13 @@ class _MyHomePageState extends State<MyHomePage> {
       2,
       5000,
     );
+
+// Subscribe to all events when app is started.
+// (Use allStringLinkStream to get it as [String])
+    _appLinks.allUriLinkStream.listen((uri) {
+      print('retorno');
+      print(uri ?? 'veio null');
+    });
   }
 
   @override
