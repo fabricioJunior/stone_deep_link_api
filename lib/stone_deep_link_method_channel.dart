@@ -48,6 +48,8 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
   }
 
   Future _onMensagemRecebida(MethodCall call) async {
+    print(call.toString());
+    print(call.arguments.toString());
     if (call.method == 'pagamentoFinalizado') {
       _onPagamentoFinalizado(call.arguments.toString());
     }
