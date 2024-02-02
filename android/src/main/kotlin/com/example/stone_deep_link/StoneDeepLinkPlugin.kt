@@ -117,8 +117,11 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler, PluginRegistry.NewI
   }
 
      override fun onNewIntent(intent: Intent): Boolean {
+       Log.i("intent action", intent.action.toString())
+       handleDeepLinkResponse(intent)
+
        if (intent.action === Intent.ACTION_VIEW) {
-         handleDeepLinkResponse(intent)
+
        }
        return  true;
   }
