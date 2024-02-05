@@ -12,7 +12,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity: FlutterActivity() {
-    private val CHANNEL = "mainDeeplinkChannel"
+    private val CHANNEL = "stone_deep_link"
     private lateinit var flutterEngine: FlutterEngine
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
