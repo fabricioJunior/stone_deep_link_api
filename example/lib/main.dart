@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:app_links/app_links.dart';
+import 'package:stone_deep_link/presentaion/pagamento_modal.dart';
 
 import 'package:stone_deep_link/stone_deep_link.dart';
 
@@ -35,21 +37,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String deeplinkResult = "";
-  final _appLinks = AppLinks();
-
   Future<void> _sendDeeplink() async {
-    StoneDeepLink().fazerPagamento(
-      FormaDePagamento.credito,
-      2,
-      5000,
+    var result = await showPagamentoModal(
+      context,
+      formaDePagamento: FormaDePagamento.credito,
+      valor: 5000,
+      parcelas: 2,
     );
-
-// Subscribe to all events when app is started.
-// (Use allStringLinkStream to get it as [String])
-    _appLinks.allUriLinkStream.listen((uri) {
-      print('retorno');
-      print(uri ?? 'veio null');
-    });
+    log(result?.toString() ?? '');
   }
 
   @override

@@ -19,6 +19,9 @@ class MockStoneDeepLinkPlatform
   ) async {
     return;
   }
+
+  @override
+  Stream<String> get onPagamentoFinalizado => throw UnimplementedError();
 }
 
 void main() {

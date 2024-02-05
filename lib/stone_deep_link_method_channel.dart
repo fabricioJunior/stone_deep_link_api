@@ -14,6 +14,7 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
   final StreamController<String> _onPagamentoFinalizadoStreamController =
       StreamController.broadcast();
 
+  @override
   Stream<String> get onPagamentoFinalizado =>
       _onPagamentoFinalizadoStreamController.stream;
 
@@ -48,8 +49,6 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
   }
 
   Future _onMensagemRecebida(MethodCall call) async {
-    print(call.toString());
-    print(call.arguments.toString());
     if (call.method == 'pagamentoFinalizado') {
       _onPagamentoFinalizado(call.arguments.toString());
     }

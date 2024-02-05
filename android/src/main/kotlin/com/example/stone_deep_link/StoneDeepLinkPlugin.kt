@@ -17,7 +17,7 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 
 /** StoneDeepLinkPlugin */
-class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler, PluginRegistry.NewIntentListener  {
+class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
@@ -99,32 +99,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler, PluginRegistry.NewI
     Log.v(TAG, "toUri(scheme = ${intent.data})")
   }
 
-  private fun handleDeepLinkResponse(intent: Intent) {
-    try {
-      channel.invokeMethod("deep_link_response", intent.data.toString())
-      if(context == null){
-           return;
-      }
-      Log.i("onNewIntent", intent?.data.toString())
-      if (intent?.data != null) {
-        Toast.makeText(context, intent.data.toString(), Toast.LENGTH_LONG).show()
-        Log.i("DeeplinkPay Response", intent.data.toString())
-      }
-    } catch (e: Exception) {
-      Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show()
-      Log.e("Deeplink error", e.toString())
-    }
-  }
 
-     override fun onNewIntent(intent: Intent): Boolean {
-       Log.i("intent action", intent.action.toString())
-       handleDeepLinkResponse(intent)
-
-       if (intent.action === Intent.ACTION_VIEW) {
-
-       }
-       return  true;
-  }
 
   companion object {
     private const val AMOUNT = "amount"

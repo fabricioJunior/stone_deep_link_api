@@ -5,6 +5,8 @@ import 'stone_deep_link_platform_interface.dart';
 export 'package:smart_pag_contract/interfaces/pagamento.dart';
 
 class StoneDeepLink {
+  Stream<String> get onPagamentoFinalizado =>
+      StoneDeepLinkPlatform.instance.onPagamentoFinalizado;
   Future<String?> getPlatformVersion() {
     return StoneDeepLinkPlatform.instance.getPlatformVersion();
   }

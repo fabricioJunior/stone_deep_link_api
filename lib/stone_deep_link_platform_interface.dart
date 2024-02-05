@@ -15,6 +15,8 @@ abstract class StoneDeepLinkPlatform extends PlatformInterface {
   /// Defaults to [MethodChannelStoneDeepLink].
   static StoneDeepLinkPlatform get instance => _instance;
 
+  Stream<String> get onPagamentoFinalizado;
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [StoneDeepLinkPlatform] when
   /// they register themselves.
