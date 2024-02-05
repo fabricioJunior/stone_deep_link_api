@@ -24,15 +24,12 @@ class MainActivity: FlutterActivity() {
         this.flutterEngine = flutterEngine
     }
 
-
-
     private fun handleDeepLinkResponse(intent: Intent) {
         try {
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).invokeMethod("pagamentoFinalizado",  intent.data.toString())
 
-            Log.i("onNewIntent", intent?.data.toString())
+            Log.i("onNewIntent from main", intent?.data.toString())
             if (intent?.data != null) {
-                Toast.makeText(this, intent.data.toString(), Toast.LENGTH_LONG).show()
                 Log.i("DeeplinkPay Response", intent.data.toString())
             }
         } catch (e: Exception) {
