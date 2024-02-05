@@ -26,7 +26,7 @@ class PagamentoBloc extends Bloc<PagamentoEvent, PagamentoState> {
       stoneDeepLink.fazerPagamento(
         event.formaDePagamento,
         event.parcelas,
-        event.parcelas,
+        event.valor,
       );
     } catch (e, s) {
       addError(e, s);
