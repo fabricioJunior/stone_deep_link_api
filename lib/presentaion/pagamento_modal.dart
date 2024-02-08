@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_pag_contract/injections/injections.dart';
 import 'package:stone_deep_link/presentaion/pagamento_bloc/pagamento_event.dart';
 import 'package:stone_deep_link/presentaion/pagamento_bloc/pagamento_state.dart';
 import 'package:stone_deep_link/stone_deep_link.dart';

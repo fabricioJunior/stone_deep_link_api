@@ -5,7 +5,7 @@ import 'stone_deep_link.dart';
 
 class Pagamento extends PagamentoContract {
   @override
-  Future<Map<String, String>> fazerPagamento(
+  Future<PagamentoResult> fazerPagamento(
     FormaDePagamento formaDePagamento,
     int parcelas,
     int valor,
@@ -19,15 +19,25 @@ class Pagamento extends PagamentoContract {
     );
 
     if (pagamentoResult == null) {
-      return {'result': 'errp'};
+      return PagamentoResult.erro(erro: 'Falha no pagamento');
     }
-
-    Map<String, String> result = {};
-    for (var key in pagamentoResult.keys) {
-      result.addAll({key: pagamentoResult[key].toString()});
-    }
-
-    return result;
+    var cardBrand = pagamentoResult['MASTERCARD'];
+    var cardBin = '';
+    var nsu = pagamentoResult['nsu'];
+    var date = pagamentoResult['authorization_date_time'];
+    var transactionCode = pagamentoResult['authorization_code'];
+    var transactionID = pagamentoResult['atk'];
+    var hostNSU = pagamentoResult['account_id'];
+    return PagamentoResult(
+      cardBrand: cardBrand,
+      cardBin: cardBin,
+      nsu: nsu,
+      date: DateTime.parse(date),
+      time: DateTime.parse(date),
+      hostNSU: hostNSU,
+      transactionID: transactionID,
+      transactionCode: transactionCode,
+    );
   }
 
   @override

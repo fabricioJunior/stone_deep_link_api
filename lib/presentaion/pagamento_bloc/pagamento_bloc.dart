@@ -7,12 +7,12 @@ import 'package:stone_deep_link/stone_deep_link.dart';
 
 class PagamentoBloc extends Bloc<PagamentoEvent, PagamentoState> {
   final StoneDeepLink stoneDeepLink;
-
+  late StreamSubscription<String> _streamSubscription;
   PagamentoBloc(this.stoneDeepLink) : super(PagamentoNaoIniciado()) {
     on<PagamentoIniciou>(_onPagamentoIniciou);
     on<PagamentoFinalizou>(_onPagamentoFinalizou);
 
-    stoneDeepLink.onPagamentoFinalizado.listen((event) {
+    _streamSubscription = stoneDeepLink.onPagamentoFinalizado.listen((event) {
       add(PagamentoFinalizou(result: event));
     });
   }
@@ -43,5 +43,11 @@ class PagamentoBloc extends Bloc<PagamentoEvent, PagamentoState> {
     } catch (e, s) {
       addError(e, s);
     }
+  }
+
+  @override
+  Future<void> close() async {
+    await _streamSubscription.cancel();
+    super.close();
   }
 }

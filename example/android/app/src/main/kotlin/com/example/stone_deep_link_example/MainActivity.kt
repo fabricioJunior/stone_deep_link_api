@@ -1,6 +1,7 @@
 package com.example.stone_deep_link_example
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
@@ -27,7 +28,10 @@ class MainActivity: FlutterActivity() {
     private fun handleDeepLinkResponse(intent: Intent) {
         try {
             MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).invokeMethod("pagamentoFinalizado",  intent.data.toString())
-
+            val data: Uri? = intent?.data;
+            val dataInString: String? = intent.dataString;
+            Log.i("Uri", data.toString())
+            Log.i("dataInString", dataInString ?: "");
             Log.i("onNewIntent from main", intent?.data.toString())
             if (intent?.data != null) {
                 Log.i("DeeplinkPay Response", intent.data.toString())

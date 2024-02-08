@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:app_links/app_links.dart';
 import 'package:stone_deep_link/presentaion/pagamento_modal.dart';
 
 import 'package:stone_deep_link/stone_deep_link.dart';
@@ -10,6 +9,7 @@ import 'package:stone_deep_link/stone_deep_link.dart';
 void main() {
   runApp(MyApp());
 }
+//adb shell am start -W -a android.intent.action.VIEW -d "deepstone://pay-response?code=0\&amount=100\&cardholder_name=JOAO%2FSILVA\&itk=PB0419AL60480-1.17.7-2278-0003\&atk=37820073187607\&authorization_date_time=05%2F10%2F2022%2002%3A36%3A17\&brand=MASTERCARD\&authorization_code=187607&installment_count=0\&pan=627303****2166\&type=D%C3%A9bito\&entry_mode=ICC"
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'DeepLink Demo'),
+      home: const MyHomePage(title: 'DeepLink Demo'),
     );
   }
 }
