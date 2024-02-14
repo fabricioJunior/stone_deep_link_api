@@ -16,6 +16,7 @@ class MockStoneDeepLinkPlatform
     String formaDePagamento,
     int parcelas,
     int valor,
+    String deepLinkReturnSchema,
   ) async {
     return;
   }

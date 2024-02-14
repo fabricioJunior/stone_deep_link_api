@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
       formaDePagamento: FormaDePagamento.credito,
       valor: 5000,
       parcelas: 2,
+      deepLinkReturnSchema: 'deepstone',
     );
     log(result?.toString() ?? '');
   }

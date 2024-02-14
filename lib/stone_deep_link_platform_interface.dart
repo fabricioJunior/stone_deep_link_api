@@ -33,5 +33,6 @@ abstract class StoneDeepLinkPlatform extends PlatformInterface {
     String formaDePagamento,
     int parcelas,
     int valor,
+    String deepLinkReturnSchema,
   );
 }

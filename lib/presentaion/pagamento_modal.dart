@@ -11,6 +11,7 @@ Future<Map<String, dynamic>?> showPagamentoModal(
   required FormaDePagamento formaDePagamento,
   required int valor,
   required int parcelas,
+  required String deepLinkReturnSchema,
 }) async {
   return showModalBottomSheet(
     context: context,
@@ -22,6 +23,7 @@ Future<Map<String, dynamic>?> showPagamentoModal(
         formaDePagamento: formaDePagamento,
         valor: valor,
         parcelas: parcelas,
+        deepLinkReturnSchema: deepLinkReturnSchema,
       );
     },
   );
@@ -31,11 +33,13 @@ class PagamentoModal extends StatelessWidget {
   final FormaDePagamento formaDePagamento;
   final int valor;
   final int parcelas;
+  final String deepLinkReturnSchema;
 
   const PagamentoModal({
     required this.formaDePagamento,
     required this.valor,
     required this.parcelas,
+    required this.deepLinkReturnSchema,
     super.key,
   });
 
@@ -49,6 +53,7 @@ class PagamentoModal extends StatelessWidget {
             formaDePagamento: formaDePagamento,
             valor: valor,
             parcelas: parcelas,
+            deepLinkReturnSchema: deepLinkReturnSchema,
           ),
         ),
       child: BlocListener<PagamentoBloc, PagamentoState>(

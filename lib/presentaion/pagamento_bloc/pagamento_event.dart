@@ -6,11 +6,12 @@ class PagamentoIniciou extends PagamentoEvent {
   final FormaDePagamento formaDePagamento;
   final int valor;
   final int parcelas;
-
+  final String deepLinkReturnSchema;
   PagamentoIniciou({
     required this.formaDePagamento,
     required this.valor,
     required this.parcelas,
+    required this.deepLinkReturnSchema,
   });
 }
 

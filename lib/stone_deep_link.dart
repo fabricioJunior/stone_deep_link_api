@@ -15,12 +15,13 @@ class StoneDeepLink {
     FormaDePagamento formaDePagamento,
     int parcelas,
     int valor,
+    String deepLinkReturnSchema,
   ) async {
     await StoneDeepLinkPlatform.instance.fazerPagamento(
-      formaDePagamento.toFormaDePagamentoStone(),
-      parcelas,
-      valor,
-    );
+        formaDePagamento.toFormaDePagamentoStone(),
+        parcelas,
+        valor,
+        deepLinkReturnSchema);
   }
 }
 

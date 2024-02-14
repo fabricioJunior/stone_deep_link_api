@@ -34,6 +34,7 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
     String formaDePagamento,
     int parcelas,
     int valor,
+    String deepLinkReturnSchema,
   ) async {
     Map<String, String> args = {
       "amount": valor.toString(),

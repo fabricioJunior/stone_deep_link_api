@@ -9,13 +9,15 @@ class Pagamento extends PagamentoContract {
     FormaDePagamento formaDePagamento,
     int parcelas,
     int valor,
-    BuildContext context,
-  ) async {
+    BuildContext context, {
+    String? deepLinkReturnSchema,
+  }) async {
     var pagamentoResult = await showPagamentoModal(
       context,
       formaDePagamento: formaDePagamento,
       valor: valor,
       parcelas: parcelas,
+      deepLinkReturnSchema: deepLinkReturnSchema ?? 'deepstone',
     );
 
     if (pagamentoResult == null) {
