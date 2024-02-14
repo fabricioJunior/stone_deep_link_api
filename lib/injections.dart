@@ -6,4 +6,5 @@ import 'pagamento.dart';
 void resolveDependenciasStoneDeepLink() {
   sl.registerFactory<PagamentoContract>(() => Pagamento());
   pagamentoIsImplements = true;
+  pagamentoContractInject = true;
 }
