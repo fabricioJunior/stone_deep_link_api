@@ -34,6 +34,8 @@ extension FormaDePagamentoToStone on FormaDePagamento {
         return 'DEBIT';
       case FormaDePagamento.pix:
         return 'PIX';
+      case FormaDePagamento.vale:
+        return 'VOUCHER';
       default:
         throw UnimplementedError('forma de pagamento não implementada');
     }
