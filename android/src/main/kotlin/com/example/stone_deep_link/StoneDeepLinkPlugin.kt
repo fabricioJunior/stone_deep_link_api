@@ -42,7 +42,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
         editableAmount?.toBoolean(),
         transactionType,
         installmentCount?.toInt(),
-        transactionType == ("DEBIT" ?: null),
+        installmentType,
         call.argument<String?>("orderId")?.toInt(),
         call.argument<String?>("returnScheme")
       )
@@ -58,7 +58,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     editableAmount: Boolean?,
     transactionType: String?,
     installmentCount: Int?,
-    installmentType: Boolean,
+    installmentType: String?,
     orderId: Int?,
     returnScheme: String?
   ) {
@@ -78,7 +78,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     }
 
     if (installmentType != null) {
-      uriBuilder.appendQueryParameter(INSTALLMENT_TYPE, installmentType.toString())
+      uriBuilder.appendQueryParameter(INSTALLMENT_TYPE, installmentType)
     }
 
     if (installmentCount != null) {
