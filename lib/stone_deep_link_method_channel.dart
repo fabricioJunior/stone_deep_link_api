@@ -48,7 +48,7 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
 
     await methodChannel.invokeMethod<bool>('fazerPagamento', args);
   }
-
+//adb shell am start -W -a android.intent.action.VIEW -d "payment-app://pay?return_scheme=deepstone\&editable_amount=0\&amount=5599\&transaction_type=VOUCHER"
   Future _onMensagemRecebida(MethodCall call) async {
     if (call.method == 'pagamentoFinalizado') {
       _onPagamentoFinalizado(call.arguments.toString());

@@ -5,16 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
-import androidx.annotation.NonNull
-import androidx.core.content.ContextCompat.startActivity
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry
 
 /** StoneDeepLinkPlugin */
 class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
@@ -39,12 +35,14 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
       var editableAmount = call.argument<String?>("editableAmount")
       var transactionType = call.argument<String?>("transactionType")
       var installmentCount =   call.argument<String?>("installmentCount")
+
+      var installmentType =   call.argument<String?>("installmentType");
       sendDeeplink(
         amount?.toInt(),
         editableAmount?.toBoolean(),
         transactionType,
         installmentCount?.toInt(),
-        call.argument<String?>("installmentType"),
+        transactionType == ("DEBIT" ?: null),
         call.argument<String?>("orderId")?.toInt(),
         call.argument<String?>("returnScheme")
       )
@@ -60,7 +58,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     editableAmount: Boolean?,
     transactionType: String?,
     installmentCount: Int?,
-    installmentType: String?,
+    installmentType: Boolean,
     orderId: Int?,
     returnScheme: String?
   ) {
@@ -80,7 +78,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     }
 
     if (installmentType != null) {
-      uriBuilder.appendQueryParameter(INSTALLMENT_TYPE, installmentType)
+      uriBuilder.appendQueryParameter(INSTALLMENT_TYPE, installmentType.toString())
     }
 
     if (installmentCount != null) {
@@ -94,7 +92,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     val intent = Intent(Intent.ACTION_VIEW)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     intent.data = uriBuilder.build()
-    context?.let { startActivity(it, intent, Bundle()) }
+    context?.let { context?.startActivity(intent, Bundle()) }
 
     Log.v(TAG, "toUri(scheme = ${intent.data})")
   }
