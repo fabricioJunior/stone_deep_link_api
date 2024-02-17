@@ -47,7 +47,12 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
         call.argument<String?>("returnScheme")
       )
       result.success(true)
-    }else if (call.method == "getPlatformVersion") {
+    }else if(call.method == "estorno")  {
+      var transactionID = call.argument<String?>("transactionID")
+
+    }
+
+    else if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     } else {
       result.notImplemented()
@@ -95,6 +100,17 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     context?.let { context?.startActivity(intent, Bundle()) }
 
     Log.v(TAG, "toUri(scheme = ${intent.data})")
+  }
+
+  private fun  sendDeepLinkToCancel(
+    transactionID: String,
+    returnScheme: String?
+  ){
+
+    val uriBuilder = Uri.Builder()
+    uriBuilder.authority("pay")
+    uriBuilder.scheme("payment-app")
+    uriBuilder.appendQueryParameter(RETURN_SCHEME, returnScheme ?: "deepstone")
   }
 
 
