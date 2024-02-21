@@ -37,7 +37,7 @@ class Pagamento extends PagamentoContract {
       nsu: nsu ?? '',
       date: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date), //trata forma data
       time: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date),
-      hostNSU: hostNSU,
+      hostNSU: hostNSU ?? '',
       transactionID: transactionID,
       transactionCode: transactionCode,
     );
