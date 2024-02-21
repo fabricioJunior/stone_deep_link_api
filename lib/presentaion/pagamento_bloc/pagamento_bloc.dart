@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stone_deep_link/presentaion/pagamento_bloc/pagamento_event.dart';
@@ -40,6 +41,7 @@ class PagamentoBloc extends Bloc<PagamentoEvent, PagamentoState> {
   ) {
     try {
       var uri = Uri.parse(event.result);
+      log('emitiu pagamento finalizado');
       emit(PagamentoSucesso(resultado: uri.queryParameters));
     } catch (e, s) {
       addError(e, s);

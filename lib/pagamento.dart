@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:stone_deep_link/presentaion/pagamento_modal.dart';
 
 import 'stone_deep_link.dart';
@@ -23,7 +24,7 @@ class Pagamento extends PagamentoContract {
     if (pagamentoResult == null) {
       return PagamentoResult.erro(erro: 'Falha no pagamento');
     }
-    var cardBrand = pagamentoResult['MASTERCARD'];
+    var cardBrand = pagamentoResult["brand"];
     var cardBin = '';
     var nsu = pagamentoResult['nsu'];
     var date = pagamentoResult['authorization_date_time'];
@@ -33,9 +34,9 @@ class Pagamento extends PagamentoContract {
     return PagamentoResult(
       cardBrand: cardBrand,
       cardBin: cardBin,
-      nsu: nsu,
-      date: DateTime.parse(date),
-      time: DateTime.parse(date),
+      nsu: nsu ?? '',
+      date: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date), //trata forma data
+      time: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date),
       hostNSU: hostNSU,
       transactionID: transactionID,
       transactionCode: transactionCode,
