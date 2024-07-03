@@ -6,13 +6,11 @@ import 'stone_deep_link.dart';
 
 class Pagamento extends PagamentoContract {
   @override
-  Future<PagamentoResult> fazerPagamento(
-    FormaDePagamento formaDePagamento,
-    int parcelas,
-    int valor,
-    BuildContext context, {
-    String? deepLinkReturnSchema,
-  }) async {
+  Future<PagamentoResult> fazerPagamento(FormaDePagamento formaDePagamento,
+      int parcelas, int valor, BuildContext context,
+      {String? deepLinkReturnSchema,
+      FormaDeCobrancaDeJuros? formaDeCobranca,
+      bool? imprimirComprovanteAutomaticamente}) async {
     var pagamentoResult = await showPagamentoModal(
       context,
       formaDePagamento: formaDePagamento,
@@ -35,8 +33,10 @@ class Pagamento extends PagamentoContract {
       cardBrand: cardBrand,
       cardBin: cardBin,
       nsu: nsu ?? '',
-      date: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date), //trata forma data
-      time: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date),
+      date: DateFormat('dd/MM/yyyy hh:mm:ss')
+          .parse(date)
+          .toString(), //trata forma data
+      time: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date).toString(),
       hostNSU: hostNSU ?? '',
       transactionID: transactionID,
       transactionCode: transactionCode,
@@ -44,7 +44,8 @@ class Pagamento extends PagamentoContract {
   }
 
   @override
-  Future<void> imprimirArquivo({required String filePath}) {
+  Future<void> imprimirArquivo(
+      {required BuildContext context, required String filePath}) {
     throw UnimplementedError();
   }
 
@@ -52,7 +53,15 @@ class Pagamento extends PagamentoContract {
   Future<void> realizarEstorno({
     String? transactionCode,
     String? transactionId,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    //throw UnimplementedError();
   }
+
+  @override
+  Future<String> serialDaMaquina() async {
+    return '';
+  }
+
+  @override
+  String get tipoDaMaquina => 'stone';
 }
