@@ -44,8 +44,10 @@ class Pagamento extends PagamentoContract {
   }
 
   @override
-  Future<void> imprimirArquivo(
-      {required BuildContext context, required String filePath}) {
+  Future<void> imprimirArquivo({
+    required BuildContext context,
+    required String filePath,
+  }) {
     throw UnimplementedError();
   }
 
@@ -58,10 +60,11 @@ class Pagamento extends PagamentoContract {
   }
 
   @override
-  Future<String> serialDaMaquina() async {
-    return '';
-  }
+  String get tipoDaMaquina => 'stone';
 
   @override
-  String get tipoDaMaquina => 'stone';
+  Future<String> serialDaMaquina() {
+    // TODO: implement serialDaMaquina
+    throw UnimplementedError();
+  }
 }
