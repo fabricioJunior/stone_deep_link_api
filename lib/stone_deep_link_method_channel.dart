@@ -14,9 +14,15 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
   final StreamController<String> _onPagamentoFinalizadoStreamController =
       StreamController.broadcast();
 
+  final StreamController<String> _onEstornoFinalizadoStreamController =
+      StreamController.broadcast();
+
   @override
   Stream<String> get onPagamentoFinalizado =>
       _onPagamentoFinalizadoStreamController.stream;
+
+  Stream<String> get onEstornoFinalizado =>
+      _onEstornoFinalizadoStreamController.stream;
 
   MethodChannelStoneDeepLink() {
     methodChannel.setMethodCallHandler(_onMensagemRecebida);
@@ -59,12 +65,31 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
 
   Future _onMensagemRecebida(MethodCall call) async {
     if (call.method == 'pagamentoFinalizado') {
-      _onPagamentoFinalizado(call.arguments.toString());
+      _onPagamentoFinalizado(
+        call.arguments.toString(),
+      );
+      _onEstornoFinalizado(
+        call.arguments.toString(),
+      );
     }
+    if (call.method == 'estornoFinalizado') {}
   }
-  //
+
+  @override
+  Future<void> fazerEstorno(int valor, int atk, bool permiteEditarValor) async {
+    Map<String, String?> args = {
+      "amount": valor.toString(),
+      "editableAmount": false.toString(),
+      "atk": atk.toString(),
+    };
+    await methodChannel.invokeMethod<bool>('fazerEstorno', args);
+  }
 
   void _onPagamentoFinalizado(String resposta) {
     _onPagamentoFinalizadoStreamController.add(resposta);
+  }
+
+  void _onEstornoFinalizado(String resposta) {
+    _onEstornoFinalizadoStreamController.add(resposta);
   }
 }

@@ -23,6 +23,11 @@ class MockStoneDeepLinkPlatform
 
   @override
   Stream<String> get onPagamentoFinalizado => throw UnimplementedError();
+
+  @override
+  Future<void> fazerEstorno(int valor, int atk, bool permiteEditarValor) async {
+    return;
+  }
 }
 
 void main() {

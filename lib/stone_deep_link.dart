@@ -23,6 +23,18 @@ class StoneDeepLink {
         valor,
         deepLinkReturnSchema);
   }
+
+  Future<void> fazerEstorno(
+    int valor,
+    int atk,
+    bool permiteEditarValor,
+  ) async {
+    await StoneDeepLinkPlatform.instance.fazerEstorno(
+      valor,
+      atk,
+      permiteEditarValor,
+    );
+  }
 }
 
 extension FormaDePagamentoToStone on FormaDePagamento {

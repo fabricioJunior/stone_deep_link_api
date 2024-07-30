@@ -6,11 +6,15 @@ import 'stone_deep_link.dart';
 
 class Pagamento extends PagamentoContract {
   @override
-  Future<PagamentoResult> fazerPagamento(FormaDePagamento formaDePagamento,
-      int parcelas, int valor, BuildContext context,
-      {String? deepLinkReturnSchema,
-      FormaDeCobrancaDeJuros? formaDeCobranca,
-      bool? imprimirComprovanteAutomaticamente}) async {
+  Future<PagamentoResult> fazerPagamento(
+    FormaDePagamento formaDePagamento,
+    int parcelas,
+    int valor,
+    BuildContext context, {
+    String? deepLinkReturnSchema,
+    FormaDeCobrancaDeJuros? formaDeCobranca,
+    bool? imprimirComprovanteAutomaticamente,
+  }) async {
     var pagamentoResult = await showPagamentoModal(
       context,
       formaDePagamento: formaDePagamento,
