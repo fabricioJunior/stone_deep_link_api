@@ -2,15 +2,20 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:stone_deep_link/presentaion/pagamento_modal.dart';
 
+import 'presentaion/estorno_modal.dart';
 import 'stone_deep_link.dart';
 
 class Pagamento extends PagamentoContract {
   @override
-  Future<PagamentoResult> fazerPagamento(FormaDePagamento formaDePagamento,
-      int parcelas, int valor, BuildContext context,
-      {String? deepLinkReturnSchema,
-      FormaDeCobrancaDeJuros? formaDeCobranca,
-      bool? imprimirComprovanteAutomaticamente}) async {
+  Future<PagamentoResult> fazerPagamento(
+    FormaDePagamento formaDePagamento,
+    int parcelas,
+    int valor,
+    BuildContext context, {
+    String? deepLinkReturnSchema,
+    FormaDeCobrancaDeJuros? formaDeCobranca,
+    bool? imprimirComprovanteAutomaticamente,
+  }) async {
     var pagamentoResult = await showPagamentoModal(
       context,
       formaDePagamento: formaDePagamento,
@@ -52,19 +57,28 @@ class Pagamento extends PagamentoContract {
   }
 
   @override
-  Future<void> realizarEstorno({
-    String? transactionCode,
-    String? transactionId,
-  }) async {
-    //throw UnimplementedError();
-  }
-
-  @override
   String get tipoDaMaquina => 'stone';
 
   @override
   Future<String> serialDaMaquina() {
     // TODO: implement serialDaMaquina
     throw UnimplementedError();
+  }
+
+  @override
+  Future<void> realizarEstorno({
+    required BuildContext context,
+    int? valor,
+    bool? permiteEditarValor,
+    String? transactionCode,
+    String? transactionId,
+  }) async {
+    await showEstornoModal(
+      context,
+      valor: valor ?? 0,
+      atk: int.parse(transactionId!),
+      permiteEditarValor: false,
+      deepLinkReturnSchema: '',
+    );
   }
 }

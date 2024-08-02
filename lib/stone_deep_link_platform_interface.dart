@@ -35,4 +35,10 @@ abstract class StoneDeepLinkPlatform extends PlatformInterface {
     int valor,
     String deepLinkReturnSchema,
   );
+
+  Future<void> fazerEstorno(
+    int valor,
+    int atk,
+    bool permiteEditarValor,
+  );
 }
