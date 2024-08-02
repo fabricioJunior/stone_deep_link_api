@@ -272,10 +272,10 @@ packages:
     dependency: "direct main"
     description:
       name: smart_pag_contract
-      sha256: "6b03571dfc922e3e9c2f0efcd396f9b590ab4f7aa0aa2ff4432dea6eed07988c"
+      sha256: "50d4c215a287141c47dfe150ad1c0df1c4df895af9f8f77366269e1bc679ed7d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.0.21"
+    version: "0.0.22"
   source_span:
     dependency: transitive
     description:
