@@ -118,8 +118,8 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
   ){
 
     val uriBuilder = Uri.Builder()
-    uriBuilder.authority("pay")
-    uriBuilder.scheme("payment-app")
+    uriBuilder.authority("cancel")
+    uriBuilder.scheme("cancel-app")
     uriBuilder.appendQueryParameter(RETURN_SCHEME, returnScheme ?: "deepstone")
     uriBuilder.appendQueryParameter(EDITABLE_AMOUNT, if (editableAmount == true) "1" else "0")
     uriBuilder.appendQueryParameter(AMOUNT, amount.toLong().toString())
