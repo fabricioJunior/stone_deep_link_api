@@ -124,6 +124,14 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     uriBuilder.appendQueryParameter(EDITABLE_AMOUNT, if (editableAmount == true) "1" else "0")
     uriBuilder.appendQueryParameter(AMOUNT, amount.toLong().toString())
     uriBuilder.appendQueryParameter(ATK, atk)
+
+
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.data = uriBuilder.build()
+    context?.let { context?.startActivity(intent, Bundle()) }
+
+    Log.v(TAG, "toUri(scheme = ${intent.data})")
   }
 
 
