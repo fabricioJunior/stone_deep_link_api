@@ -47,8 +47,16 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
         call.argument<String?>("returnScheme")
       )
       result.success(true)
-    }else if(call.method == "estorno")  {
-      var transactionID = call.argument<String?>("transactionID")
+    }else if(call.method == "fazerEstorno")  {
+      var amount = call.argument<String>("amount")
+      var editableAmount = call.argument<String?>("editableAmount")
+      var atk =  call.argument<String?>("atk")
+      sendDeepLinkToEstorno(
+        amount!!.toInt(),
+        atk!!,
+        call.argument<String?>("returnScheme"),
+        editableAmount!!.toBoolean()
+      );
 
     }
 
@@ -102,15 +110,20 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     Log.v(TAG, "toUri(scheme = ${intent.data})")
   }
 
-  private fun  sendDeepLinkToCancel(
-    transactionID: String,
-    returnScheme: String?
+  private fun  sendDeepLinkToEstorno(
+    amount: Int,
+    atk: String,
+    returnScheme: String?,
+    editableAmount: Boolean?
   ){
 
     val uriBuilder = Uri.Builder()
     uriBuilder.authority("pay")
     uriBuilder.scheme("payment-app")
     uriBuilder.appendQueryParameter(RETURN_SCHEME, returnScheme ?: "deepstone")
+    uriBuilder.appendQueryParameter(EDITABLE_AMOUNT, if (editableAmount == true) "1" else "0")
+    uriBuilder.appendQueryParameter(AMOUNT, amount.toLong().toString())
+    uriBuilder.appendQueryParameter(ATK, atk)
   }
 
 
@@ -124,6 +137,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     private const val INSTALLMENT_COUNT = "installment_count"
     private const val RETURN_SCHEME = "return_scheme"
     private const val TAG = "SendDeeplinkPayment"
+    private  const val ATK = "atk"
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
