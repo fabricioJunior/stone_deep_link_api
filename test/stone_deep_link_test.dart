@@ -28,6 +28,12 @@ class MockStoneDeepLinkPlatform
   Future<void> fazerEstorno(int valor, int atk, bool permiteEditarValor) async {
     return;
   }
+
+  @override
+  Future<String> getSerial() {
+    // TODO: implement getSerial
+    throw UnimplementedError();
+  }
 }
 
 void main() {

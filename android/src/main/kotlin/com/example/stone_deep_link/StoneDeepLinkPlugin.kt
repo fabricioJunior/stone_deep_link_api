@@ -3,8 +3,10 @@ package com.example.stone_deep_link
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -28,6 +30,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     channel.setMethodCallHandler(this)
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   override fun onMethodCall(call: MethodCall, result: Result) {
 
     if (call.method == "fazerPagamento") {
@@ -59,7 +62,10 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
       );
 
     }
-
+    else if(call.method == "serial"){
+      var data = Build.getSerial().toString();
+      result.success(data);
+    }
     else if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     } else {

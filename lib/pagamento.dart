@@ -4,6 +4,7 @@ import 'package:stone_deep_link/presentaion/pagamento_modal.dart';
 
 import 'presentaion/estorno_modal.dart';
 import 'stone_deep_link.dart';
+import 'stone_deep_link_platform_interface.dart';
 
 class Pagamento extends PagamentoContract {
   @override
@@ -61,8 +62,7 @@ class Pagamento extends PagamentoContract {
 
   @override
   Future<String> serialDaMaquina() {
-    // TODO: implement serialDaMaquina
-    throw UnimplementedError();
+    return StoneDeepLinkPlatform.instance.getSerial();
   }
 
   @override
