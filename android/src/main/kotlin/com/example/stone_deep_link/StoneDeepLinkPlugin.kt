@@ -63,7 +63,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
 
     }
     else if(call.method == "serial"){
-      var data = Build.getSerial().toString();
+      var data = Build.SERIAL;
       result.success(data);
     }
     else if (call.method == "getPlatformVersion") {
