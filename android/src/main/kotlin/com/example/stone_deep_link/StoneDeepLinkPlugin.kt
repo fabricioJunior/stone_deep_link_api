@@ -2,17 +2,21 @@ package com.example.stone_deep_link
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import java.io.ByteArrayOutputStream
 
 /** StoneDeepLinkPlugin */
 class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
@@ -68,9 +72,40 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     }
     else if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
+    }
+    else if(call.method == "imprimir"){
+
+    }
+    else {
       result.notImplemented()
     }
+  }
+
+  private fun print(){
+
+    val pathJpg =
+      Environment.getExternalStorageDirectory().absolutePath + "/download/comprovante2.jpg"
+    val bm: Bitmap = BitmapFactory.decodeFile(pathJpg)
+    val baos = ByteArrayOutputStream()
+    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
+
+    val b: ByteArray = baos.toByteArray()
+
+    val encodedImage: String = Base64.encodeToString(b, Base64.DEFAULT)
+
+
+    val uriBuilder = Uri.Builder()
+    uriBuilder.authority("print")
+    uriBuilder.scheme("printer-app")
+    uriBuilder.appendQueryParameter("SHOW_FEEDBACK_SCREEN", true.toString())
+    uriBuilder.appendQueryParameter("SCHEME_RETURN", "deepstone")
+    uriBuilder.appendQueryParameter("PRINTABLE_CONTENT", encodedImage)
+
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.data = uriBuilder.build()
+    context?.let { context?.startActivity(intent, Bundle()) }
+
   }
   private fun sendDeeplink(
     amount: Int?,

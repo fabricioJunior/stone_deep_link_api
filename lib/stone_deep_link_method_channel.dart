@@ -98,4 +98,9 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
     var response = await methodChannel.invokeMethod<String?>('serial');
     return response ?? '';
   }
+
+  @override
+  Future<void> imprimirArquivo() async {
+    methodChannel.invokeMethod<bool>('imprimir');
+  }
 }

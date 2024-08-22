@@ -34,6 +34,12 @@ class MockStoneDeepLinkPlatform
     // TODO: implement getSerial
     throw UnimplementedError();
   }
+
+  @override
+  Future<void> imprimirArquivo() {
+    // TODO: implement imprimirArquivo
+    throw UnimplementedError();
+  }
 }
 
 void main() {

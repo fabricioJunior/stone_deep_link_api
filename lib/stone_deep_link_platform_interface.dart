@@ -17,6 +17,8 @@ abstract class StoneDeepLinkPlatform extends PlatformInterface {
 
   Stream<String> get onPagamentoFinalizado;
 
+  Future<void> imprimirArquivo();
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [StoneDeepLinkPlatform] when
   /// they register themselves.
