@@ -53,8 +53,8 @@ class Pagamento extends PagamentoContract {
   Future<void> imprimirArquivo({
     required BuildContext context,
     required String filePath,
-  }) {
-    throw UnimplementedError();
+  }) async {
+    StoneDeepLinkPlatform.instance.imprimirArquivo();
   }
 
   @override
