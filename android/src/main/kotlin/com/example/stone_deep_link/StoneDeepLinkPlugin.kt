@@ -74,7 +74,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     }
     else if(call.method == "imprimir"){
-
+        print();
     }
     else {
       result.notImplemented()
@@ -195,3 +195,5 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
 
 
 }
+
+
