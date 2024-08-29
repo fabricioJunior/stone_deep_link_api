@@ -20,6 +20,7 @@ import java.io.ByteArrayOutputStream
 
 import android.view.View
 import android.widget.Toast
+import org.json.JSONObject
 import java.lang.Exception
 /** StoneDeepLinkPlugin */
 class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
@@ -96,13 +97,20 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
 
     val encodedImage: String = Base64.encodeToString(b, Base64.DEFAULT)
 
+    var jsonToSend = "" +
+            "[" +
+            "{" +
+            "\"type\": \"image\",\n" +
+            "\"imagePath\": ${encodedImage} " +
+            "}" +
+            "]";
 
     val uriBuilder = Uri.Builder()
     uriBuilder.authority("print")
     uriBuilder.scheme("printer-app")
     uriBuilder.appendQueryParameter("SHOW_FEEDBACK_SCREEN", true.toString())
     uriBuilder.appendQueryParameter("SCHEME_RETURN", "deepstone")
-    uriBuilder.appendQueryParameter("PRINTABLE_CONTENT", encodedImage)
+    uriBuilder.appendQueryParameter("PRINTABLE_CONTENT", jsonToSend)
 
     val intent = Intent(Intent.ACTION_VIEW)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
