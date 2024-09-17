@@ -11,6 +11,10 @@ class StoneDeepLink {
     return StoneDeepLinkPlatform.instance.getPlatformVersion();
   }
 
+  Future<void> imprimirArquivo() async {
+    return StoneDeepLinkPlatform.instance.imprimirArquivo();
+  }
+
   Future<void> fazerPagamento(
     FormaDePagamento formaDePagamento,
     int parcelas,

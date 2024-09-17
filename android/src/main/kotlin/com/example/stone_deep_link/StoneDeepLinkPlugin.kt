@@ -2,16 +2,26 @@ package com.example.stone_deep_link
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Base64
 import android.util.Log
-
+import androidx.annotation.RequiresApi
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import java.io.ByteArrayOutputStream
 
+import android.view.View
+import android.widget.Toast
+import org.json.JSONObject
+import java.lang.Exception
 /** StoneDeepLinkPlugin */
 class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
   /// The MethodChannel that will the communication between Flutter and native Android
@@ -28,6 +38,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     channel.setMethodCallHandler(this)
   }
 
+  @RequiresApi(Build.VERSION_CODES.O)
   override fun onMethodCall(call: MethodCall, result: Result) {
 
     if (call.method == "fazerPagamento") {
@@ -47,16 +58,65 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
         call.argument<String?>("returnScheme")
       )
       result.success(true)
-    }else if(call.method == "estorno")  {
-      var transactionID = call.argument<String?>("transactionID")
+    }else if(call.method == "fazerEstorno")  {
+      var amount = call.argument<String>("amount")
+      var editableAmount = call.argument<String?>("editableAmount")
+      var atk =  call.argument<String?>("atk")
+      sendDeepLinkToEstorno(
+        amount!!.toInt(),
+        atk!!,
+        call.argument<String?>("returnScheme"),
+        editableAmount!!.toBoolean()
+      );
 
     }
-
+    else if(call.method == "serial"){
+      var data = Build.SERIAL;
+      result.success(data);
+    }
     else if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
+    }
+    else if(call.method == "imprimir"){
+        print();
+    }
+    else {
       result.notImplemented()
     }
+  }
+
+  private fun print(){
+
+    val pathJpg =
+      Environment.getExternalStorageDirectory().absolutePath + "/download/comprovante2.jpg"
+    val bm: Bitmap = BitmapFactory.decodeFile(pathJpg)
+    val baos = ByteArrayOutputStream()
+    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
+
+    val b: ByteArray = baos.toByteArray()
+
+    val encodedImage: String = Base64.encodeToString(b, Base64.DEFAULT)
+
+    var jsonToSend = "" +
+            "[" +
+            "{" +
+            "\"type\": \"image\",\n" +
+            "\"imagePath\": ${encodedImage} " +
+            "}" +
+            "]";
+
+    val uriBuilder = Uri.Builder()
+    uriBuilder.authority("print")
+    uriBuilder.scheme("printer-app")
+    uriBuilder.appendQueryParameter("SHOW_FEEDBACK_SCREEN", true.toString())
+    uriBuilder.appendQueryParameter("SCHEME_RETURN", "deepstone")
+    uriBuilder.appendQueryParameter("PRINTABLE_CONTENT", jsonToSend)
+
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.data = uriBuilder.build()
+    context?.let { context?.startActivity(intent, Bundle()) }
+    Log.v(TAG, "toUri(scheme = ${intent.data})")
   }
   private fun sendDeeplink(
     amount: Int?,
@@ -102,15 +162,28 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     Log.v(TAG, "toUri(scheme = ${intent.data})")
   }
 
-  private fun  sendDeepLinkToCancel(
-    transactionID: String,
-    returnScheme: String?
+  private fun  sendDeepLinkToEstorno(
+    amount: Int,
+    atk: String,
+    returnScheme: String?,
+    editableAmount: Boolean?
   ){
 
     val uriBuilder = Uri.Builder()
-    uriBuilder.authority("pay")
-    uriBuilder.scheme("payment-app")
+    uriBuilder.authority("cancel")
+    uriBuilder.scheme("cancel-app")
     uriBuilder.appendQueryParameter(RETURN_SCHEME, returnScheme ?: "deepstone")
+    uriBuilder.appendQueryParameter(EDITABLE_AMOUNT, if (editableAmount == true) "1" else "0")
+    uriBuilder.appendQueryParameter(AMOUNT, amount.toLong().toString())
+    uriBuilder.appendQueryParameter(ATK, atk)
+
+
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.data = uriBuilder.build()
+    context?.let { context?.startActivity(intent, Bundle()) }
+
+    Log.v(TAG, "toUri(scheme = ${intent.data})")
   }
 
 
@@ -124,6 +197,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     private const val INSTALLMENT_COUNT = "installment_count"
     private const val RETURN_SCHEME = "return_scheme"
     private const val TAG = "SendDeeplinkPayment"
+    private  const val ATK = "atk"
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -132,3 +206,5 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
 
 
 }
+
+

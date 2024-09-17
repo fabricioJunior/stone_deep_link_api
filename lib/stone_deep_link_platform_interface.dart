@@ -17,6 +17,8 @@ abstract class StoneDeepLinkPlatform extends PlatformInterface {
 
   Stream<String> get onPagamentoFinalizado;
 
+  Future<void> imprimirArquivo();
+
   /// Platform-specific implementations should set this with their own
   /// platform-specific class that extends [StoneDeepLinkPlatform] when
   /// they register themselves.
@@ -25,9 +27,9 @@ abstract class StoneDeepLinkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
+  Future<String?> getPlatformVersion();
+
+  Future<String> getSerial();
 
   Future<void> fazerPagamento(
     String formaDePagamento,
