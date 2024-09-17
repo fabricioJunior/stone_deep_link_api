@@ -24,8 +24,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-              <data android:scheme="deepstone"
-                  android:host="pay-response" />
+              <data android:scheme="test"
+                  android:host="print" />
 	        </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
