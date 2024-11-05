@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_pag_contract/interfaces/log.dart';
 import 'package:stone_deep_link/presentaion/pagamento_modal.dart';
 
 import 'presentaion/estorno_modal.dart';
@@ -81,4 +82,12 @@ class Pagamento extends PagamentoContract {
       deepLinkReturnSchema: '',
     );
   }
+
+  @override
+  Future<List<Log>> recuperarLogsUltimaTransacao() async {
+    return [];
+  }
+
+  @override
+  Future<void> salvarLog(Log log) async {}
 }
