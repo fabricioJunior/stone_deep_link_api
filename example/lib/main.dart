@@ -37,41 +37,18 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String deeplinkResult = "";
   Future<void> _sendDeeplink() async {
-    var cacheDirectoy = Directory('/storage/emulated/0/download');
+    // var cacheDirectoy = Directory('/storage/emulated/0/download');
 
-    File file = File('${cacheDirectoy.path}/comprovante2.jpg');
-    final bytes = File(file.path).readAsBytesSync();
+    // File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+    // final bytes = File(file.path).readAsBytesSync();
 
-    String img64 = base64Encode(bytes);
+    // String img64 = base64Encode(bytes);
+    var json = jsonEncode([
+      Line(type: 'line', content: 'texto qualuqer'),
+    ]);
 
-    var json = """
-[
-  {
-    "type": "text",
-    "content": "texto centro grande",
-    "align": "center",
-    "size": "big"
-  },
-  {
-    "type": "text",
-    "content": "texto direita médio",
-    "align": "right",
-    "size": "medium"
-  },
-  {
-    "type": "text",
-    "content": "texto esquerda pequeno",
-    "align": "left",
-    "size": "small"
-  },
-  {
-    "type": "line",
-    "content": "texto sem customização"
-  },
-]
-""";
     launchUrlString(
-      'printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=deepstone&PRINTABLE_CONTENT=${json}',
+      'printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=deepstone&PRINTABLE_CONTENT="$json"',
     );
   }
 
@@ -95,4 +72,16 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ));
   }
+}
+
+class Line {
+  final String type;
+  final String content;
+
+  Line({required this.type, required this.content});
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'content': content,
+      };
 }
