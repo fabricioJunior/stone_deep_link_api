@@ -44,11 +44,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // String img64 = base64Encode(bytes);
     var json = jsonEncode([
-      Line(type: 'line', content: 'texto qualuqer'),
+      Line(type: 'line', content: 'texto qualuqer external platform'),
     ]);
 
     launchUrlString(
-      'printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=deepstone&PRINTABLE_CONTENT="$json"',
+      'printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=deepstone&PRINTABLE_CONTENT=$json',
     );
   }
 
