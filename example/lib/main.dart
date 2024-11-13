@@ -1,9 +1,15 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:jpeg_encode/jpeg_encode.dart';
+import 'package:millimeters/millimeters.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot/screenshot.dart';
 
 import 'dart:io';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher_string.dart';
+import "dart:ui" as ui;
 
 void main() {
   runApp(MyApp());
@@ -25,6 +31,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class WidgetTest extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [Text('teste')],
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   final String title;
 
@@ -37,19 +52,27 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String deeplinkResult = "";
   Future<void> _sendDeeplink() async {
-    // var cacheDirectoy = Directory('/storage/emulated/0/download');
+    await imprimirFromWidget(context, WidgetTest());
+    var cacheDirectoy = Directory('/storage/emulated/0/download');
 
-    // File file = File('${cacheDirectoy.path}/comprovante2.jpg');
-    // final bytes = File(file.path).readAsBytesSync();
-
-    // String img64 = base64Encode(bytes);
+    File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+    var image = file.readAsBytesSync();
     var json = jsonEncode([
-      Line(type: 'line', content: 'texto qualuqer'),
+      Line(
+        type: 'image',
+        content: base64Encode(image),
+      ),
     ]);
 
+    var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
+      'SHOW_FEEDBACK_SCREEN': 'true',
+      'SCHEME_RETURN': 'test',
+      'PRINTABLE_CONTENT': json,
+    });
+
     launchUrlString(
-      'printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=deepstone&PRINTABLE_CONTENT="$json"',
-      mode: LaunchMode.externalApplication,
+      uri.toString(),
+      mode: LaunchMode.externalNonBrowserApplication,
     );
   }
 
@@ -85,4 +108,72 @@ class Line {
         'type': type,
         'content': content,
       };
+}
+
+Future<void> imprimirFromWidget(
+  BuildContext context,
+  dynamic widget,
+) async {
+  ScreenshotController screenshotController = ScreenshotController();
+
+  var millimetersData = getMillimetersData(context);
+  Uint8List widgetImage = await screenshotController.captureFromLongWidget(
+    FolhaDeImpressa(
+      data: millimetersData,
+      child: widget,
+    ),
+    delay: Duration.zero,
+    constraints: BoxConstraints(
+      maxWidth: millimetersData.mm(47),
+      maxHeight: double.infinity,
+    ),
+  );
+
+  await Permission.manageExternalStorage.request();
+  await Permission.storage.request();
+  final codec = await ui.instantiateImageCodec(widgetImage);
+  final frame = await codec.getNextFrame();
+  var image = frame.image;
+  final data = await frame.image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  final jpg = JpegEncoder()
+      .compress(data!.buffer.asUint8List(), image.width, image.height, 90);
+
+  var cacheDirectoy = Directory('/storage/emulated/0/download');
+
+  File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+  if (file.existsSync()) {
+    await file.delete();
+  }
+  await file.writeAsBytes(jpg, mode: FileMode.write);
+}
+
+MillimetersData getMillimetersData(BuildContext context) {
+  double width = MediaQuery.of(context).size.width;
+  double height = MediaQuery.of(context).size.height;
+  var resolution = Size(width, height);
+
+  var physical = Size(43, height);
+  var data = MillimetersData(physical: physical, resolution: resolution);
+  return data;
+}
+
+class FolhaDeImpressa extends StatelessWidget {
+  final Widget child;
+  final MillimetersData data;
+
+  const FolhaDeImpressa({
+    super.key,
+    required this.child,
+    required this.data,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Colors.white,
+      child: SizedBox(
+        width: data.mm(47),
+        child: child,
+      ),
+    );
+  }
 }
