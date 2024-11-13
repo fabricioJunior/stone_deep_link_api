@@ -1,10 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:jpeg_encode/jpeg_encode.dart';
+import 'package:millimeters/millimeters.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot/screenshot.dart';
 
 import 'dart:io';
 import 'dart:convert';
 import 'package:url_launcher/url_launcher_string.dart';
+import "dart:ui" as ui;
 
 void main() {
   runApp(MyApp());
@@ -26,6 +32,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class WidgetTest extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('teste', style: Theme.of(context).textTheme.displayLarge),
+      ],
+    );
+  }
+}
+
 class MyHomePage extends StatefulWidget {
   final String title;
 
@@ -38,20 +55,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String deeplinkResult = "";
   Future<void> _sendDeeplink() async {
-    // var cacheDirectoy = Directory('/storage/emulated/0/download');
+    await imprimirFromWidget(context, WidgetTest());
+    var cacheDirectoy = Directory('/storage/emulated/0/download');
 
-    // File file = File('${cacheDirectoy.path}/comprovante2.jpg');
-    // final bytes = File(file.path).readAsBytesSync();
-
-    // String img64 = base64Encode(bytes);
-    Codec<String, String> stringToBase64 = utf8.fuse(base64);
-
-    var image =
-        'iVBORw0KGgoAAAANSUhEUgAAAHcAAAAuCAAAAAA309lpAAACMklEQVRYw91YQXLDIAyUMj027Us606f6RL7lJP0Ise/bg7ERSLLdZkxnyiVGIK0AoRVh0J+0l2ZITCAmSus8tYNNv9wUl8Xn2A6XZec8tsK9lN0zEaFBCxMc0M3IoHawBAAxffLx9/frY1kkEV0/iYjC8bjjmSRuCrHjcXMoS9zD4/nqePNf10v2whrkDRjLR4t8BWPXbdyRmccDgBMZUXDiiv2DeSK4sKwWrfgIda8V/6L6blZvLMARTescAohCD7xlcsItjYXEXHn2LIESzO3mDARPYTJXwiQ/VgWFobsYGKRdRy5x6/1QuAPpKdq89MiTS1x9EBXuYJyVZd46p6ndXVwAqfwJpd4C20uLk/LsUIilQ5Q11A4tuIU8Ti4bi8oz6lNX8iD8rNUdXDm3iMs81le4pUOLOJrGatzBx1VqVRSU8qAdNRc855GwHxcFblQbYTvqx3M0ZxZnZeBq+UoayI0h3y7QPMhOyQA9JMkO9aMIqs6Rmrw73T6ey9anvDX5kbinvT2PW7yYzj8ogrcYqBOJjNxc21d5EjmH0e/iaqUV9dXj3YgYtkvCjbjaqs5O+85MxVvwTcZdhR5YuFbckCSfNkHUolTcE9Cq9iQfXtV62bo9nUBIm8AXedPidimVFIjZCdYlTw4W8RtsatKC7Bt7D4t5tMle9qPD+y4uyL81FS/UnnVu3eMzhuj3G7CqzkHF77ISsaoraSsqVnRhq3rSZ+F5Ur//b5zOOVoAwDc6szxdC+PYAAAAAABJRU5ErkJggg==';
+    File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+    var image = file.readAsBytesSync();
     var json = jsonEncode([
       Line(
         type: 'image',
-        content: image,
+        content: base64Encode(image),
       ),
     ]);
 
@@ -60,8 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
       'SCHEME_RETURN': 'test',
       'PRINTABLE_CONTENT': json,
     });
-
-    log(uri.toString());
 
     launchUrlString(
       uri.toString(),
@@ -101,4 +111,72 @@ class Line {
         'type': type,
         'imagePath': content,
       };
+}
+
+Future<void> imprimirFromWidget(
+  BuildContext context,
+  dynamic widget,
+) async {
+  ScreenshotController screenshotController = ScreenshotController();
+
+  var millimetersData = getMillimetersData(context);
+  Uint8List widgetImage = await screenshotController.captureFromLongWidget(
+    FolhaDeImpressa(
+      data: millimetersData,
+      child: widget,
+    ),
+    delay: Duration.zero,
+    constraints: BoxConstraints(
+      maxWidth: millimetersData.mm(47),
+      maxHeight: double.infinity,
+    ),
+  );
+
+  await Permission.manageExternalStorage.request();
+  await Permission.storage.request();
+  final codec = await ui.instantiateImageCodec(widgetImage);
+  final frame = await codec.getNextFrame();
+  var image = frame.image;
+  final data = await frame.image.toByteData(format: ui.ImageByteFormat.rawRgba);
+  final jpg = JpegEncoder()
+      .compress(data!.buffer.asUint8List(), image.width, image.height, 90);
+
+  var cacheDirectoy = Directory('/storage/emulated/0/download');
+
+  File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+  if (file.existsSync()) {
+    await file.delete();
+  }
+  await file.writeAsBytes(jpg, mode: FileMode.write);
+}
+
+MillimetersData getMillimetersData(BuildContext context) {
+  double width = MediaQuery.of(context).size.width;
+  double height = MediaQuery.of(context).size.height;
+  var resolution = Size(width, height);
+
+  var physical = Size(43, height);
+  var data = MillimetersData(physical: physical, resolution: resolution);
+  return data;
+}
+
+class FolhaDeImpressa extends StatelessWidget {
+  final Widget child;
+  final MillimetersData data;
+
+  const FolhaDeImpressa({
+    super.key,
+    required this.child,
+    required this.data,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Colors.white,
+      child: SizedBox(
+        width: data.mm(47),
+        child: child,
+      ),
+    );
+  }
 }
