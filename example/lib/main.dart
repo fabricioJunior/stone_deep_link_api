@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     launchUrlString(
       'printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=deepstone&PRINTABLE_CONTENT="$json"',
+      mode: LaunchMode.externalApplication,
     );
   }
 
