@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 
 import 'dart:io';
@@ -43,12 +44,28 @@ class _MyHomePageState extends State<MyHomePage> {
     // final bytes = File(file.path).readAsBytesSync();
 
     // String img64 = base64Encode(bytes);
+    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+
+    var image =
+        'iVBORw0KGgoAAAANSUhEUgAAAHcAAAAuCAAAAAA309lpAAACMklEQVRYw91YQXLDIAyUMj027Us606f6RL7lJP0Ise/bg7ERSLLdZkxnyiVGIK0AoRVh0J+0l2ZITCAmSus8tYNNv9wUl8Xn2A6XZec8tsK9lN0zEaFBCxMc0M3IoHawBAAxffLx9/frY1kkEV0/iYjC8bjjmSRuCrHjcXMoS9zD4/nqePNf10v2whrkDRjLR4t8BWPXbdyRmccDgBMZUXDiiv2DeSK4sKwWrfgIda8V/6L6blZvLMARTescAohCD7xlcsItjYXEXHn2LIESzO3mDARPYTJXwiQ/VgWFobsYGKRdRy5x6/1QuAPpKdq89MiTS1x9EBXuYJyVZd46p6ndXVwAqfwJpd4C20uLk/LsUIilQ5Q11A4tuIU8Ti4bi8oz6lNX8iD8rNUdXDm3iMs81le4pUOLOJrGatzBx1VqVRSU8qAdNRc855GwHxcFblQbYTvqx3M0ZxZnZeBq+UoayI0h3y7QPMhOyQA9JMkO9aMIqs6Rmrw73T6ey9anvDX5kbinvT2PW7yYzj8ogrcYqBOJjNxc21d5EjmH0e/iaqUV9dXj3YgYtkvCjbjaqs5O+85MxVvwTcZdhR5YuFbckCSfNkHUolTcE9Cq9iQfXtV62bo9nUBIm8AXedPidimVFIjZCdYlTw4W8RtsatKC7Bt7D4t5tMle9qPD+y4uyL81FS/UnnVu3eMzhuj3G7CqzkHF77ISsaoraSsqVnRhq3rSZ+F5Ur//b5zOOVoAwDc6szxdC+PYAAAAAABJRU5ErkJggg==';
     var json = jsonEncode([
-      Line(type: 'line', content: 'texto qualuqer external platform'),
+      Line(
+        type: 'image',
+        content: image,
+      ),
     ]);
 
+    var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
+      'SHOW_FEEDBACK_SCREEN': 'true',
+      'SCHEME_RETURN': 'test',
+      'PRINTABLE_CONTENT': json,
+    });
+
+    log(uri.toString());
+
     launchUrlString(
-      'printer-app://print?SHOW_FEEDBACK_SCREEN=true&SCHEME_RETURN=deepstone&PRINTABLE_CONTENT=$json',
+      uri.toString(),
+      mode: LaunchMode.externalNonBrowserApplication,
     );
   }
 
@@ -82,6 +99,6 @@ class Line {
 
   Map<String, dynamic> toJson() => {
         'type': type,
-        'content': content,
+        'imagePath': content,
       };
 }
