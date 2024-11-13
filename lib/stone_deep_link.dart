@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:smart_pag_contract/smart_pag_contract.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'stone_deep_link_platform_interface.dart';
 
@@ -12,6 +16,27 @@ class StoneDeepLink {
   }
 
   Future<void> imprimirArquivo() async {
+    var cacheDirectoy = Directory('/storage/emulated/0/download');
+
+    File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+    var image = file.readAsBytesSync();
+    var json = jsonEncode([
+      Line(
+        type: 'image',
+        content: base64Encode(image),
+      ),
+    ]);
+
+    var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
+      'SHOW_FEEDBACK_SCREEN': 'true',
+      'SCHEME_RETURN': 'test',
+      'PRINTABLE_CONTENT': json,
+    });
+
+    launchUrlString(
+      uri.toString(),
+      mode: LaunchMode.externalNonBrowserApplication,
+    );
     return StoneDeepLinkPlatform.instance.imprimirArquivo();
   }
 
@@ -56,4 +81,16 @@ extension FormaDePagamentoToStone on FormaDePagamento {
         throw UnimplementedError('forma de pagamento não implementada');
     }
   }
+}
+
+class Line {
+  final String type;
+  final String content;
+
+  Line({required this.type, required this.content});
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'imagePath': content,
+      };
 }
