@@ -33,7 +33,7 @@ class StoneDeepLink {
       'PRINTABLE_CONTENT': json,
     });
 
-    launchUrlString(
+    await launchUrlString(
       uri.toString(),
       mode: LaunchMode.externalNonBrowserApplication,
     );
