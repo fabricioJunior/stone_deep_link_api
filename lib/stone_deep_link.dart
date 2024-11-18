@@ -29,7 +29,7 @@ class StoneDeepLink {
 
     var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
       'SHOW_FEEDBACK_SCREEN': 'true',
-      'SCHEME_RETURN': 'deepstone',
+      'SCHEME_RETURN': 'test',
       'PRINTABLE_CONTENT': json,
     });
 
