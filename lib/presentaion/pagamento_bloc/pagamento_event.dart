@@ -7,11 +7,14 @@ class PagamentoIniciou extends PagamentoEvent {
   final int valor;
   final int parcelas;
   final String deepLinkReturnSchema;
+  final FormaDeCobrancaDeJuros formaDeCobrancaDeJuros;
+
   PagamentoIniciou({
     required this.formaDePagamento,
     required this.valor,
     required this.parcelas,
     required this.deepLinkReturnSchema,
+    required this.formaDeCobrancaDeJuros,
   });
 }
 

@@ -1,4 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:stone_deep_link/stone_deep_link.dart';
 
 import 'stone_deep_link_method_channel.dart';
 
@@ -36,6 +37,7 @@ abstract class StoneDeepLinkPlatform extends PlatformInterface {
     int parcelas,
     int valor,
     String deepLinkReturnSchema,
+    FormaDeCobrancaDeJuros formaDeCobrancaDeJuros,
   );
 
   Future<void> fazerEstorno(
