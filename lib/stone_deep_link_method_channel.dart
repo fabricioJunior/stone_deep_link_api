@@ -135,6 +135,8 @@ extension ToStoneFormart on FormaDeCobrancaDeJuros {
     }
     return 'NONE';
   }
+}
+
 class Line {
   final String type;
   final String content;
