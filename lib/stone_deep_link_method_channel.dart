@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:stone_deep_link/stone_deep_link.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'stone_deep_link_platform_interface.dart';
 
@@ -98,7 +101,27 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
 
   @override
   Future<void> imprimirArquivo() async {
-    methodChannel.invokeMethod<bool>('imprimir');
+    var cacheDirectoy = Directory('/storage/emulated/0/download');
+
+    File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+    var image = file.readAsBytesSync();
+    var json = jsonEncode([
+      Line(
+        type: 'image',
+        content: base64Encode(image),
+      ),
+    ]);
+
+    var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
+      'SHOW_FEEDBACK_SCREEN': 'true',
+      'SCHEME_RETURN': 'test',
+      'PRINTABLE_CONTENT': json,
+    });
+
+    await launchUrlString(
+      uri.toString(),
+      mode: LaunchMode.externalNonBrowserApplication,
+    );
   }
 }
 
@@ -112,4 +135,14 @@ extension ToStoneFormart on FormaDeCobrancaDeJuros {
     }
     return 'NONE';
   }
+class Line {
+  final String type;
+  final String content;
+
+  Line({required this.type, required this.content});
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'imagePath': content,
+      };
 }

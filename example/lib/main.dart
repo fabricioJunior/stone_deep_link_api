@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:jpeg_encode/jpeg_encode.dart';
 import 'package:millimeters/millimeters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:stone_deep_link/stone_deep_link.dart';
+import 'package:stone_deep_link/stone_deep_link_platform_interface.dart';
 
 import 'dart:io';
 import 'dart:convert';
@@ -35,7 +38,9 @@ class WidgetTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Text('teste')],
+      children: [
+        Text('teste', style: Theme.of(context).textTheme.displayLarge),
+      ],
     );
   }
 }
@@ -78,27 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
       '',
       '',
     );
-    var cacheDirectoy = Directory('/storage/emulated/0/download');
-
-    File file = File('${cacheDirectoy.path}/comprovante2.jpg');
-    var image = file.readAsBytesSync();
-    var json = jsonEncode([
-      Line(
-        type: 'image',
-        content: base64Encode(image),
-      ),
-    ]);
-
-    var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
-      'SHOW_FEEDBACK_SCREEN': 'true',
-      'SCHEME_RETURN': 'test',
-      'PRINTABLE_CONTENT': json,
-    });
-
-    launchUrlString(
-      uri.toString(),
-      mode: LaunchMode.externalNonBrowserApplication,
-    );
+    await StoneDeepLinkPlatform.instance.imprimirArquivo();
   }
 
   @override
@@ -131,7 +116,7 @@ class Line {
 
   Map<String, dynamic> toJson() => {
         'type': type,
-        'content': content,
+        'imagePath': content,
       };
 }
 
