@@ -44,12 +44,15 @@ class StoneDeepLink {
     int parcelas,
     int valor,
     String deepLinkReturnSchema,
+    FormaDeCobrancaDeJuros formaDeCobrancaDeJuros,
   ) async {
     await StoneDeepLinkPlatform.instance.fazerPagamento(
-        formaDePagamento.toFormaDePagamentoStone(),
-        parcelas,
-        valor,
-        deepLinkReturnSchema);
+      formaDePagamento.toFormaDePagamentoStone(),
+      parcelas,
+      valor,
+      deepLinkReturnSchema,
+      formaDeCobrancaDeJuros,
+    );
   }
 
   Future<void> fazerEstorno(

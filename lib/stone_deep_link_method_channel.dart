@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:stone_deep_link/stone_deep_link.dart';
 
 import 'stone_deep_link_platform_interface.dart';
 
@@ -41,21 +42,17 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
     int parcelas,
     int valor,
     String deepLinkReturnSchema,
+    FormaDeCobrancaDeJuros formaDeCobrancaDeJuros,
   ) async {
     Map<String, String?> args = {
       "amount": valor.toString(),
       "editableAmount": false.toString(),
       "transactionType": formaDePagamento,
     };
-    if (parcelas == 1 && formaDePagamento == 'CREDIT') {
-      args.addAll({
-        'installmentType': 'NONE',
-      });
-    } else {
-      args.addAll({
-        'installmentType': formaDePagamento == 'CREDIT' ? 'MERCHANT' : null
-      });
-    }
+    args.addAll({
+      'installmentType': formaDeCobrancaDeJuros.toStoneFormart(),
+    });
+
     if (parcelas >= 2) {
       args.addAll({"installmentCount": parcelas.toString()});
     }
@@ -102,5 +99,17 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
   @override
   Future<void> imprimirArquivo() async {
     methodChannel.invokeMethod<bool>('imprimir');
+  }
+}
+
+extension ToStoneFormart on FormaDeCobrancaDeJuros {
+  String toStoneFormart() {
+    if (this == FormaDeCobrancaDeJuros.jurosCobradoDoCliente) {
+      return 'MERCHANT';
+    }
+    if (this == FormaDeCobrancaDeJuros.jurosCobradoDoVendedor) {
+      return 'ISSUER';
+    }
+    return 'NONE';
   }
 }

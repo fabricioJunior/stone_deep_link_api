@@ -24,6 +24,8 @@ class Pagamento extends PagamentoContract {
       valor: valor,
       parcelas: parcelas,
       deepLinkReturnSchema: deepLinkReturnSchema ?? 'deepstone',
+      formaDeCobranca:
+          formaDeCobranca ?? FormaDeCobrancaDeJuros.jurosCobradoDoVendedor,
     );
 
     if (pagamentoResult == null) {

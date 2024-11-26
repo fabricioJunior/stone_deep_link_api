@@ -29,6 +29,7 @@ class PagamentoBloc extends Bloc<PagamentoEvent, PagamentoState> {
         event.parcelas,
         event.valor,
         event.deepLinkReturnSchema,
+        event.formaDeCobrancaDeJuros,
       );
     } catch (e, s) {
       addError(e, s);
