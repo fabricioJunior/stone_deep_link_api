@@ -117,7 +117,7 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
 
     var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
       'SHOW_FEEDBACK_SCREEN': 'true',
-      'SCHEME_RETURN': 'test',
+      'SCHEME_RETURN': 'deepstone',
       'PRINTABLE_CONTENT': json,
     });
 
