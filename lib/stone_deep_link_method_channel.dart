@@ -128,10 +128,10 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
 extension ToStoneFormart on FormaDeCobrancaDeJuros {
   String toStoneFormart() {
     if (this == FormaDeCobrancaDeJuros.jurosCobradoDoCliente) {
-      return 'MERCHANT';
+      return 'ISSUER';
     }
     if (this == FormaDeCobrancaDeJuros.jurosCobradoDoVendedor) {
-      return 'ISSUER';
+      return 'MERCHANT';
     }
     return 'NONE';
   }
