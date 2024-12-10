@@ -112,16 +112,19 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
       ),
     ]);
 
-    var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
-      'SHOW_FEEDBACK_SCREEN': 'true',
-      'SCHEME_RETURN': 'test',
-      'PRINTABLE_CONTENT': json,
-    });
+    // var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
+    //   'SHOW_FEEDBACK_SCREEN': 'true',
+    //   'SCHEME_RETURN': 'test',
+    //   'PRINTABLE_CONTENT': json,
+    // });
 
-    await launchUrlString(
-      uri.toString(),
-      mode: LaunchMode.externalNonBrowserApplication,
-    );
+    await methodChannel
+        .invokeMethod<String?>('imprimir', <String, String>{'json': json});
+
+    // await launchUrlString(
+    //   uri.toString(),
+    //   mode: LaunchMode.externalNonBrowserApplication,
+    // );
   }
 }
 
