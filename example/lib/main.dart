@@ -57,33 +57,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String deeplinkResult = "";
   Future<void> _sendDeeplink() async {
-    await imprimirNfc(
-      context,
-      'empresa',
-      'endereco',
-      'fone',
-      'cnpj',
-      'inscricao',
-      'municiapl',
-      'email',
-      '231',
-      '100',
-      '1231',
-      '1231',
-      '',
-      '',
-      'dataEmissao',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) => MySecodPage(),
+      ),
     );
-    await StoneDeepLinkPlatform.instance.imprimirArquivo();
   }
 
   @override
@@ -98,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
             children: <Widget>[
               ElevatedButton(
                 onPressed: _sendDeeplink,
-                child: const Text('Enviar deeplink',
+                child: const Text('Acessar segunda pagina',
                     style: TextStyle(fontSize: 20)),
               ),
               Text(deeplinkResult),
@@ -357,7 +335,7 @@ class NfcWidget extends StatelessWidget {
       children: [
         if (logo != null)
           SizedBox(width: 100, height: 100, child: Image.memory(logo!)),
-        SizedBox(
+        const SizedBox(
           height: 2,
         ),
         _empresaInfos(
@@ -369,7 +347,7 @@ class NfcWidget extends StatelessWidget {
           inscricaoMunicipal: inscricaoMunicipal,
           email: email,
         ),
-        MySeparator(
+        const MySeparator(
           height: 2,
         ),
         Text(
@@ -377,10 +355,10 @@ class NfcWidget extends StatelessWidget {
           textAlign: TextAlign.center,
           style: MyTextStyle(),
         ),
-        MySeparator(
+        const MySeparator(
           height: 2,
         ),
-        MySeparator(
+        const MySeparator(
           height: 2,
         ),
         _totais(
@@ -389,10 +367,10 @@ class NfcWidget extends StatelessWidget {
           desconto: desconto,
           quantidadeTotalDeItens: quantidadeTotalDeItens,
         ),
-        MySeparator(
+        const MySeparator(
           height: 2,
         ),
-        MySeparator(
+        const MySeparator(
           height: 2,
         ),
         Column(
@@ -450,7 +428,7 @@ class NfcWidget extends StatelessWidget {
             ),
           ],
         ),
-        MySeparator(
+        const MySeparator(
           height: 2,
         ),
         if (informacaoConsumidor == null)
@@ -465,14 +443,14 @@ class NfcWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: MyTextStyle(),
           ),
-        MySeparator(
+        const MySeparator(
           height: 2,
         ),
         Text(
           tributos,
           style: MyTextStyle(),
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Text(
@@ -503,7 +481,7 @@ class NfcWidget extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text(
@@ -511,7 +489,7 @@ class NfcWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: MyTextStyle(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text(
@@ -519,7 +497,7 @@ class NfcWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: MyTextStyle(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text(
@@ -527,7 +505,7 @@ class NfcWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: MyTextStyle(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text(
@@ -535,7 +513,7 @@ class NfcWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: MyTextStyle(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text(
@@ -543,7 +521,7 @@ class NfcWidget extends StatelessWidget {
             textAlign: TextAlign.center,
             style: MyTextStyle(),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Text(
@@ -673,6 +651,56 @@ class MySeparator extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+}
+
+class MySecodPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Segunda pagina'),
+      ),
+      body: SafeArea(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('esta é a segunda pagina'),
+          ElevatedButton(
+            onPressed: () async {
+              await imprimirNfc(
+                context,
+                'empresa',
+                'endereco',
+                'fone',
+                'cnpj',
+                'inscricao',
+                'municiapl',
+                'email',
+                '231',
+                '100',
+                '1231',
+                '1231',
+                '',
+                '',
+                'dataEmissao',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+                '',
+              );
+              await StoneDeepLinkPlatform.instance.imprimirArquivo();
+            },
+            child: Text('chamar impressora'),
+          )
+        ],
+      )),
     );
   }
 }
