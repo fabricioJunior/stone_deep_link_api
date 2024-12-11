@@ -90,14 +90,12 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
   }
 
   private fun print(json: String){
-
     val uriBuilder = Uri.Builder()
     uriBuilder.authority("print")
     uriBuilder.scheme("printer-app")
     uriBuilder.appendQueryParameter("SHOW_FEEDBACK_SCREEN", true.toString())
     uriBuilder.appendQueryParameter("SCHEME_RETURN", "deepstone")
     uriBuilder.appendQueryParameter("PRINTABLE_CONTENT", json )
-
 
     val intent = Intent(Intent.ACTION_VIEW)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

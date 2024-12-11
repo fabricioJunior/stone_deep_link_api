@@ -120,11 +120,6 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
 
     await methodChannel
         .invokeMethod<String?>('imprimir', <String, String>{'json': json});
-
-    await launchUrlString(
-      uri.toString(),
-      mode: LaunchMode.externalNonBrowserApplication,
-    );
   }
 }
 
