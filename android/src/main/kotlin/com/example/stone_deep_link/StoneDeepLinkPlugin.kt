@@ -11,17 +11,16 @@ import android.os.Environment
 import android.util.Base64
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.startActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 
-import android.view.View
-import android.widget.Toast
-import org.json.JSONObject
-import java.lang.Exception
 /** StoneDeepLinkPlugin */
 class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
   /// The MethodChannel that will the communication between Flutter and native Android
@@ -36,6 +35,7 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
     context = flutterPluginBinding.applicationContext;
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, channelName)
     channel.setMethodCallHandler(this)
+
   }
 
   @RequiresApi(Build.VERSION_CODES.O)
@@ -46,6 +46,9 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
       var editableAmount = call.argument<String?>("editableAmount")
       var transactionType = call.argument<String?>("transactionType")
       var installmentCount =   call.argument<String?>("installmentCount")
+
+
+
 
       var installmentType =   call.argument<String?>("installmentType");
       sendDeeplink(
@@ -78,39 +81,21 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     }
     else if(call.method == "imprimir"){
-        print();
+       var json = call.argument<String>("json")
+        print(json);
     }
     else {
       result.notImplemented()
     }
   }
 
-  private fun print(){
-
-    val pathJpg =
-      Environment.getExternalStorageDirectory().absolutePath + "/download/comprovante2.jpg"
-    val bm: Bitmap = BitmapFactory.decodeFile(pathJpg)
-    val baos = ByteArrayOutputStream()
-    bm.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
-
-    val b: ByteArray = baos.toByteArray()
-
-    val encodedImage: String = Base64.encodeToString(b, Base64.DEFAULT)
-
-    var jsonToSend = "" +
-            "[" +
-            "{" +
-            "\"type\": \"image\",\n" +
-            "\"imagePath\": ${encodedImage} " +
-            "}" +
-            "]";
-
+  private fun print(json: String){
     val uriBuilder = Uri.Builder()
     uriBuilder.authority("print")
     uriBuilder.scheme("printer-app")
     uriBuilder.appendQueryParameter("SHOW_FEEDBACK_SCREEN", true.toString())
     uriBuilder.appendQueryParameter("SCHEME_RETURN", "deepstone")
-    uriBuilder.appendQueryParameter("PRINTABLE_CONTENT", jsonToSend)
+    uriBuilder.appendQueryParameter("PRINTABLE_CONTENT", json )
 
     val intent = Intent(Intent.ACTION_VIEW)
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
