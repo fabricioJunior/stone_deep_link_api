@@ -6,6 +6,7 @@ import 'package:jpeg_encode/jpeg_encode.dart';
 import 'package:millimeters/millimeters.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:smart_pag_contract/smart_pag_handler.dart';
 import 'package:stone_deep_link/stone_deep_link.dart';
 import 'package:stone_deep_link/stone_deep_link_platform_interface.dart';
 
@@ -79,7 +80,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text('Acessar segunda pagina',
                     style: TextStyle(fontSize: 20)),
               ),
-              Text(deeplinkResult),
+              WidgetSize(
+                child: comprovante(
+                    viaDoEstabelecimento: false,
+                    dataPagamento: '14/12/2024',
+                    valor: '10,00',
+                    cliente: 'Sem cadastro',
+                    origemDaAutorizacao: 'mastercard',
+                    empresa: 'use por onde flor',
+                    endereco: 'rua samuel santos, 1933, loja 03, pindorama',
+                    cnpj: '1234124/0001-12',
+                    codigoDaVenda: '2024',
+                    codigoDaTransacao: '4202',
+                    nsu: '431231231',
+                    origem: 'Parnaíba',
+                    formaPagamento: 'PIXÃO'),
+              )
             ],
           ),
         ));
@@ -133,6 +149,8 @@ Future<void> imprimirFromWidget(
     await file.delete();
   }
   await file.writeAsBytes(jpg, mode: FileMode.write);
+
+  await SmartPagHandler.imprimirArquivo(file.path, context);
 }
 
 MillimetersData getMillimetersData(BuildContext context) {
@@ -703,4 +721,341 @@ class MySecodPage extends StatelessWidget {
       )),
     );
   }
+}
+
+const double inch = 72.0;
+final double cm = inch / 2.54;
+
+Future<void> imprimirComprovantePIX(
+  BuildContext context,
+  bool viaDoEstabelecimento,
+  String dataPagamento,
+  String valor,
+  String cliente,
+  String origemDaAutorizacao,
+  String empresa,
+  String endereco,
+  String cnpj,
+  String codigoDaVenda,
+  String codigoDaTransacao,
+  String nsu,
+  String origem,
+  String formaPagamento,
+) async {
+  await Permission.manageExternalStorage.request();
+  await Permission.storage.request();
+
+  imprimirFromWidget(
+    context,
+    comprovante(
+      viaDoEstabelecimento: viaDoEstabelecimento,
+      dataPagamento: dataPagamento,
+      valor: valor,
+      cliente: cliente,
+      origemDaAutorizacao: origemDaAutorizacao,
+      empresa: empresa,
+      endereco: endereco,
+      cnpj: cnpj,
+      codigoDaVenda: codigoDaVenda,
+      codigoDaTransacao: codigoDaTransacao,
+      nsu: nsu,
+      origem: origem,
+      formaPagamento: formaPagamento,
+    ),
+  );
+}
+
+Widget comprovante({
+  required bool viaDoEstabelecimento,
+  required String dataPagamento,
+  required String valor,
+  required String cliente,
+  required String origemDaAutorizacao,
+  required String empresa,
+  required String endereco,
+  required String cnpj,
+  required String codigoDaVenda,
+  required String codigoDaTransacao,
+  required String nsu,
+  required String origem,
+  required String formaPagamento,
+}) =>
+    Container(
+        decoration: BoxDecoration(color: Colors.white),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('SmartPDV',
+                        style: MyTextStyle(
+                          size: 32,
+                        )),
+                    Text(
+                      origem,
+                      style: MyTextStyle(
+                        size: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                Text(
+                  viaDoEstabelecimento ? 'VIA ESTABELECIMENTO' : 'VIA CLIENTE',
+                  style: MyTextStyle(
+                    size: 16,
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              height: 8,
+              thickness: 10,
+              color: Colors.black,
+            ),
+            SizedBox(height: 08),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  formaPagamento,
+                  style: MyTextStyle(
+                    size: 24,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          dataPagamento,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          cliente,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text('R\$ ',
+                        style: MyTextStyle(
+                          size: 16,
+                        )),
+                    Text(valor,
+                        style: MyTextStyle(
+                          size: 40,
+                        )),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Text(origemDaAutorizacao,
+                style: MyTextStyle(
+                  size: 16,
+                )),
+            Divider(
+              height: 8,
+              thickness: 10,
+              color: Colors.black,
+            ),
+            viaDoEstabelecimento
+                ? _viaEstabelecimento(
+                    empresa: empresa,
+                    cnpj: cnpj,
+                    codigoDaTransacao: codigoDaTransacao,
+                    codigoDaVenda: codigoDaVenda,
+                    nsu: nsu,
+                  )
+                : _viaCliente(
+                    empresa: empresa,
+                    cnpj: cnpj,
+                    codigoDaTransacao: codigoDaTransacao,
+                    codigoDaVenda: codigoDaVenda,
+                    nsu: nsu,
+                    endereco: endereco,
+                  ),
+          ],
+        ));
+
+Widget _viaEstabelecimento({
+  required String empresa,
+  required String cnpj,
+  required String codigoDaVenda,
+  required String codigoDaTransacao,
+  required String nsu,
+}) =>
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(empresa,
+                style: MyTextStyle(
+                  size: 16,
+                )),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(cnpj,
+                style: MyTextStyle(
+                  size: 16,
+                )),
+            Text('NSU:  ${nsu}',
+                style: MyTextStyle(
+                  size: 16,
+                ))
+          ],
+        ),
+        Text('CV: ${codigoDaVenda}',
+            style: MyTextStyle(
+              size: 16,
+            )),
+        Text('CT: ${codigoDaTransacao}',
+            style: MyTextStyle(
+              size: 16,
+            )),
+      ],
+    );
+Widget _viaCliente({
+  required String empresa,
+  required String cnpj,
+  required String codigoDaVenda,
+  required String codigoDaTransacao,
+  required String nsu,
+  required String endereco,
+}) =>
+    Wrap(
+      spacing: 16,
+      alignment: WrapAlignment.spaceBetween,
+      children: [
+        Text(endereco,
+            style: MyTextStyle(
+              size: 16,
+            )),
+        Text(empresa,
+            style: MyTextStyle(
+              size: 16,
+            )),
+        Text(cnpj,
+            style: MyTextStyle(
+              size: 16,
+            )),
+        Text('NSU: ${nsu}',
+            style: MyTextStyle(
+              size: 16,
+            )),
+        Text('CV: ${codigoDaVenda}',
+            style: MyTextStyle(
+              size: 16,
+            )),
+        Text('CT: ${codigoDaTransacao}',
+            style: MyTextStyle(
+              size: 16,
+            )),
+      ],
+    );
+
+class WidgetSize extends StatelessWidget {
+  final Widget? child;
+
+  const WidgetSize({super.key, required this.child});
+  @override
+  Widget build(BuildContext context) {
+    return SizeWidget(
+      child: child ?? const SizedBox(),
+    );
+  }
+}
+
+class SizeWidget extends StatefulWidget {
+  final Widget child;
+
+  const SizeWidget({super.key, required this.child});
+  @override
+  // ignore: library_private_types_in_public_api
+  _SizeWidgetState createState() => _SizeWidgetState();
+}
+
+class _SizeWidgetState extends State<SizeWidget> {
+  final GlobalKey _textKey = GlobalKey();
+  Size? textSize;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => getSizeAndPosition());
+  }
+
+  void getSizeAndPosition() {
+    var d = _textKey.currentContext!.size;
+
+    setState(() {
+      textSize = d;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    MillimetersData data = getMillimetersData(context);
+    return Column(
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            getSizeAndPosition();
+          },
+          child: const Text('verificar tamanho'),
+        ),
+        Text(
+          '${data.pixelToMM(textSize?.width)}, ${data.pixelToMM(textSize?.height)}',
+        ),
+        Container(
+          key: _textKey,
+          child: widget.child,
+        ),
+      ],
+    );
+  }
+
+  MillimetersData getMillimetersData(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    var resolution = Size(width, height);
+
+    var physical = Size(43, height);
+    var data = MillimetersData(physical: physical, resolution: resolution);
+    return data;
+  }
+}
+
+extension PixelToMm on MillimetersData {
+  double? pixelToMM(double? pixel) =>
+      pixel == null ? null : (pixel * devicePixelRatio) / mmPerPixel;
 }

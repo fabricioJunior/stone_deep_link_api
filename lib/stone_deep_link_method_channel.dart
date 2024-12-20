@@ -50,7 +50,7 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
     Map<String, String?> args = {
       "amount": valor.toString(),
       "editableAmount": false.toString(),
-      "transactionType": formaDePagamento,
+      "transactionType": parcelas < 2 ? 'NONE' : formaDePagamento,
     };
     args.addAll({
       'installmentType': formaDeCobrancaDeJuros.toStoneFormart(),
@@ -112,14 +112,13 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
       ),
     ]);
 
-    // var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
-    //   'SHOW_FEEDBACK_SCREEN': 'true',
-    //   'SCHEME_RETURN': 'test',
-    //   'PRINTABLE_CONTENT': json,
-    // });
+    File jsonFile = File('${cacheDirectoy.path}/json.txt');
+    if (jsonFile.existsSync()) {
+      jsonFile.deleteSync();
+    }
+    await jsonFile.writeAsString(json);
 
-    await methodChannel
-        .invokeMethod<String?>('imprimir', <String, String>{'json': json});
+    await methodChannel.invokeMethod<String?>('imprimir');
   }
 }
 
