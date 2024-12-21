@@ -8,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:smart_pag_contract/smart_pag_handler.dart';
 import 'package:stone_deep_link/stone_deep_link.dart';
+import 'package:stone_deep_link/stone_deep_link_method_channel.dart';
 import 'package:stone_deep_link/stone_deep_link_platform_interface.dart';
 
 import 'dart:io';

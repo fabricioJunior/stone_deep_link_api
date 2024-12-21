@@ -16,27 +16,27 @@ class StoneDeepLink {
   }
 
   Future<void> imprimirArquivo() async {
-    var cacheDirectoy = Directory('/storage/emulated/0/download');
+    // var cacheDirectoy = Directory('/storage/emulated/0/download');
 
-    File file = File('${cacheDirectoy.path}/comprovante2.jpg');
-    var image = file.readAsBytesSync();
-    var json = jsonEncode([
-      Line(
-        type: 'image',
-        content: base64Encode(image),
-      ),
-    ]);
+    // File file = File('${cacheDirectoy.path}/comprovante2.jpg');
+    // var image = file.readAsBytesSync();
+    // var json = jsonEncode([
+    //   Line(
+    //     type: 'image',
+    //     content: base64Encode(image),
+    //   ),
+    // ]);
 
-    var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
-      'SHOW_FEEDBACK_SCREEN': 'true',
-      'SCHEME_RETURN': 'test',
-      'PRINTABLE_CONTENT': json,
-    });
+    // var uri = Uri(scheme: 'printer-app', host: 'print', queryParameters: {
+    //   'SHOW_FEEDBACK_SCREEN': 'true',
+    //   'SCHEME_RETURN': 'deepstone',
+    //   'PRINTABLE_CONTENT': json,
+    // });
 
-    await launchUrlString(
-      uri.toString(),
-      mode: LaunchMode.externalNonBrowserApplication,
-    );
+    // await launchUrlString(
+    //   uri.toString(),
+    //   mode: LaunchMode.externalNonBrowserApplication,
+    // );
   }
 
   Future<void> fazerPagamento(

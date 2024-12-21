@@ -19,7 +19,9 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.BufferedReader
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 /** StoneDeepLinkPlugin */
 class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
@@ -81,15 +83,18 @@ class StoneDeepLinkPlugin: FlutterPlugin, MethodCallHandler  {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
     }
     else if(call.method == "imprimir"){
-       var json = call.argument<String>("json")
-        print(json);
+        this.print();
     }
     else {
       result.notImplemented()
     }
   }
 
-  private fun print(json: String){
+  private fun print(){
+    val pathJson =
+      Environment.getExternalStorageDirectory().absolutePath + "/download/json.txt"
+    val bufferedReader: BufferedReader = File(pathJson).bufferedReader()
+    val json = bufferedReader.use { it.readText() }
     val uriBuilder = Uri.Builder()
     uriBuilder.authority("print")
     uriBuilder.scheme("printer-app")

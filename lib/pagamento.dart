@@ -48,7 +48,7 @@ class Pagamento extends PagamentoContract {
       time: DateFormat('dd/MM/yyyy hh:mm:ss').parse(date).toString(),
       hostNSU: hostNSU ?? '',
       transactionID: transactionID,
-      transactionCode: transactionCode,
+      transactionCode: transactionCode ?? '',
     );
   }
 
