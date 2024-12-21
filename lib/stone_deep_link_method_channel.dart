@@ -50,10 +50,11 @@ class MethodChannelStoneDeepLink extends StoneDeepLinkPlatform {
     Map<String, String?> args = {
       "amount": valor.toString(),
       "editableAmount": false.toString(),
-      "transactionType": parcelas < 2 ? 'NONE' : formaDePagamento,
+      "transactionType": formaDePagamento,
     };
     args.addAll({
-      'installmentType': formaDeCobrancaDeJuros.toStoneFormart(),
+      'installmentType':
+          parcelas < 2 ? 'NONE' : formaDeCobrancaDeJuros.toStoneFormart(),
     });
 
     if (parcelas >= 2) {
